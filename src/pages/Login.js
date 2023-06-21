@@ -1,55 +1,111 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Form, Button,Navbar,Nav,Container,NavDropdown } from 'react-bootstrap';
+import Button from "react-bootstrap/Button";
+import { useState } from "react";
+import {
+  UNSAFE_enhanceManualRouteObjects,
+  useNavigate,
+} from "react-router-dom";
+// import Cookies from "universal-cookie";
+import Form from "react-bootstrap/Form";
+import "./Login.css";
+import { LinkContainer } from "react-router-bootstrap";
+import AlertBox from "./AlertBox";
 
-import './styles.css'
+function Login({ setToken, setUserName, setUserId }) {
+  // const cookies = new Cookies();
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+  const [showError, setShowError] = useState(false);
+  const [message, setMessage] = useState("");
 
-export default function Login() {
+  function updateForm(value) {
+    return setForm((prev) => {
+      return { ...prev, ...value };
+    });
+  }
+
+  async function handleSubmit(e) {
+    // e.preventDefault();
+    // const result = await fetch("http://localhost:5000/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ ...form }),
+    // })
+    //   .catch((error) => {
+    //     window.alert(error);
+    //     return;
+    //   })
+    //   .then((result) => result.json());
+    // console.log(result);
+    // // set the cookie
+    // cookies.set("TOKEN", result.token, {
+    //   path: "/",
+    // });
+
+    // cookies.set("USERID", result.userId, {
+    //   path: "/",
+    // });
+
+    // cookies.set("USERNAME", result.userName, {
+    //   path: "/",
+    // });
+
+    // if (result.login) {
+    //   setToken(result.token);
+    //   setUserId(result.userId);
+    //   setUserName(result.userName);
+    //   navigate("/");
+    // } else {
+    //   setShowError(true);
+    //   setMessage(result.message);
+    // }
+    // //  setForm({ email: "", password: ""});
+  }
+
   return (
-    <>
-    
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-      <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-           
-          </Nav>
-          <Nav>
-          <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
- 
-
-      <div className="mt-5" >
-        <h2 className="text-center">LOGIN</h2>
-      </div>
-      <Form className="login-form">
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email </Form.Label>
-          <Form.Control type="email" placeholder="Enter email" />
+    <div className="mt-5 centered-div">
+      <h2 className="text-center">LOGIN</h2>
+      <AlertBox showAlert={showError} message={message} variant="danger" />
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-4" controlId="formBasicEmail" aria-required>
+          <Form.Label>Email address</Form.Label>
+          <Form.Control
+            type="email"
+            onChange={(e) => updateForm({ email: e.target.value })}
+            placeholder="Enter email"
+          />
+          <Form.Text className="text-muted"></Form.Text>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" />
+          <Form.Control
+            type="password"
+            onChange={(e) => updateForm({ password: e.target.value })}
+            placeholder="Password"
+          />
         </Form.Group>
-        <Link to="/signup/">
-        <Button variant="primary" type="submit" className="login-button">
-          Login
-        </Button></Link>
+        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+          <Form.Check type="checkbox" label="Check me out" />
+        </Form.Group>
+        <div className="text-center">
+          <Button className="w-50" variant="primary" type="submit">
+            Submit
+          </Button>{" "}
+          <br></br>
+          <LinkContainer to="/register">
+            <Button className="w-50 mt-2" variant="success" type="button">
+              Register
+            </Button>
+          </LinkContainer>
+        </div>
       </Form>
-    </>
+    </div>
   );
 }
+
+export default Login;
